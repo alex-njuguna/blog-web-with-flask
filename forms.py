@@ -14,8 +14,7 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username',
-                            validators=[DataRequired(), Length(min=2, max=20)])
+    email = EmailField("Email", validators=[DataRequired(), Email()])
     
     password = PasswordField("Password", validators=[DataRequired()])
 
