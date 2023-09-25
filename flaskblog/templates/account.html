@@ -10,7 +10,7 @@
         </div>
         </div>
         <!-- FORM HERE -->
-        <form action="" method="POST" autocomplete="off">
+        <form action="" method="POST" autocomplete="off" novalidate enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Update Info</legend>
@@ -40,6 +40,17 @@
                         </div>
                     {% else %}
                         {{ form.email(class="form-control form-control-lg") }}   
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.picture.label() }}
+                    {{ form.picture(class="form-control-file") }}
+
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            <br>
+                        {% endfor %}
                     {% endif %}
                 </div>
             </fieldset>
