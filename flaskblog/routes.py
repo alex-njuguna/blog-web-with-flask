@@ -56,10 +56,14 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == "abc@xyz.com" and form.password.data == "password":
-            flash("Signed in successfully!", "success")
-            return redirect(url_for("home"))
+        email = form.email.data
+        user = User.query.filter_by(email=email).first()
+        if user:
+            if bcrypt.check_password_hash(user.password, form.password.data):
+                flash("Signed in successfully!", "success")
+                return redirect(url_for("home"))
+            else:
+                flash("Incorrect details!", "danger")
         else:
-            flash("Incorrect details!", "danger")
-
+            flash("User does not exist!", "danger")
     return render_template("login.html", title="login", form=form)
