@@ -1,24 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    
-
-    {% for post in posts  %}
-    
+    {% for post in posts %}
         <article class="media content-section bg-gray-100">
-            <img class="rounded-circle article-img" 
-                src="{{ url_for('static', filename='/profile_pics/' + post.author.image_file) }}" 
-                alt="profile pic">
             <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2 text-decoration-none text-primary" href="#">{{ post.author.username }}</a>
-                    <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <img class="rounded-circle article-img" 
+                            src="{{ url_for('static', filename='/profile_pics/' + post.author.image_file) }}" 
+                            alt="profile pic">
+                    </div>
+                    <div class="col-md-10">
+                        <div class="article-metadata">
+                            <a class="mr-2 text-decoration-none text-primary" href="#">{{ post.author.username }}</a>
+                            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                        </div>
+                    </div>
                 </div>
-                <h2><a class="article-title text-decoration-none" href="#">{{ post.title }}</a></h2>
-                <p class="article-content">{{ post.content }}</p>        
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2><a class="article-title text-decoration-none" href="{{ url_for('post', post_id=post.id ) }}">{{ post.title }}</a></h2>
+                        <p class="article-content">{{ post.content }}</p>
+                    </div>
+                </div>
             </div>
         </article>
     {% endfor %}
-
-        
 {% endblock %}
