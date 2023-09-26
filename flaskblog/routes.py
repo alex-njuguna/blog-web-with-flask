@@ -10,23 +10,10 @@ from flaskblog.models import User, Post
 from flaskblog import bcrypt
 
 
-posts = [
-    {
-    'title': 'The last of the mohicans',
-    'author': 'steven spelberg',
-    'date_posted': 'Jan 8, 1995',
-    'content': 'First post content'
-},
-{
-    'title': 'Facing mount Kenya',
-    'author': 'Jomo Kenyatta',
-    'date_posted': 'March 8, 1943',
-    'content': 'Second post content'
-}
-]
 @app.route("/home")
 @app.route("/")
 def home():
+    posts = Post.query.all()
     return render_template("home.html", posts=posts)
 
 
@@ -48,7 +35,7 @@ def register():
         hashed_pwd = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
         # save new user to db
         # with app.app_context():
-        user = User(username=form.username.data, email=form.email.data, password=hashed_pwd)
+        user = User(username=form.username.data.title(), email=form.email.data, password=hashed_pwd)
         db.session.add(user)
         db.session.commit()
         flash(f"Account created for {form.username.data}! Sign in.", "success")
@@ -119,8 +106,14 @@ def account():
     return render_template("account.html", title="account", image_file=image_file, form=form)
 
 
-@app.route("/post/new")
+@app.route("/post/new", methods=["GET", "POST"])
 @login_required
 def new_post():
     form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data.title(), content=form.content.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash(f"{form.title.data.title()} created", "success")
+        return redirect(url_for("home"))
     return render_template("create_post.html", title="new post", form=form)
