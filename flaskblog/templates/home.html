@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h2><a class="article-title text-decoration-none" href="{{ url_for('post', post_id=post.id ) }}">{{ post.title }}</a></h2>
-                        <p class="article-content">{{ post.content }}</p>
+                        <p class="article-content">{{ post.content|truncate(200, false, '...') }}</p>
                     </div>
                 </div>
             </div>
